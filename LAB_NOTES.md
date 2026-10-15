@@ -1,84 +1,96 @@
-# SecAI+ Lab 1: How AI models learn (and fail)
+# SecAI+ Lab 1: Laboratory notes
 
-Personal coursework notes for Bright Owusu.
+Bright Owusu  
+October 14, 2026 (Central Time)
 
-Date: October 14, 2026 (Central Time).
+## Purpose and record
 
-## Part A: Train a neural network
+I examined how network architecture, training time, and data quality affected a neural network's ability to classify a spiral dataset. I then examined how a tokenizer divided three types of text into tokens. My aim was to relate the observed behavior to generalization, overfitting, and the security implications of unreliable training data.
 
-All runs used the spiral dataset, classification, X1 and X2 inputs, Tanh activation, and a learning rate of 0.03.
-Batch size was 10. Regularization was None, with a rate of 0.
-The default and larger runs used seed 0.25258. The noisy run used seed 0.38080 after the data settings changed.
+I organized these notes as a record of the procedure and my interpretation of the evidence. I retained the concise results document as [LAB_REPORT.md](LAB_REPORT.md). The [submission PDF](docs/SecAI_Lab_1.pdf) contains the results and three network screenshots.
 
-| Run | Neurons per hidden layer | Noise | Training data | Epochs | Training loss | Test loss |
-| --- | --- | --- | --- | --- | --- | --- |
-| Default | 4, 2 | 0 | 50% | 325 | 0.433 | 0.486 |
-| Larger | 8, 8, 8 | 0 | 50% | 1080 | 0.005 | 0.016 |
-| Noisy | 8, 8, 8 | 50 | 10% | 780 | 0.303 | 0.611 |
+## Initial setup
 
-The default network did not separate the spiral well after 325 epochs, approximately the requested 300 epochs.
-The larger network followed the spiral well after 1080 epochs.
-The larger run also had more training time, so this comparison does not isolate network size.
+I used the hosted [TensorFlow Playground](https://playground.tensorflow.org/) rather than building or modifying the application in this repository. I selected the spiral dataset and retained classification as the problem type. I used the two original input features, X1 and X2, without adding polynomial or sine features.
 
-### Default network
+I retained the default learning rate of 0.03, Tanh activation, and a batch size of 10. I left regularization set to None and its rate set to 0. These settings remained constant across the three recorded runs. This gave me a common basis for examining the changes in network size and data conditions.
 
-![Two hidden layers: 4 and 2 neurons. Test loss: 0.486.](docs/images/a1-default.jpg)
+I recorded both training loss and test loss. I treated training loss as a measure of fit to examples used during training. I used test loss to assess performance on examples withheld from training. I did not interpret either loss value as a classification accuracy percentage.
 
-Two hidden layers: 4 and 2 neurons. Test loss: 0.486.
+## Entry 1: Establishing the baseline
 
-### Larger network
+I began with the default architecture, which contained two hidden layers with four and two neurons. I set noise to 0 and retained 50% of the data for training. The run used seed 0.25258.
 
-![Three hidden layers: 8, 8, and 8 neurons. Test loss: 0.016.](docs/images/a2-larger.jpg)
+I trained the network and paused it at 325 epochs. This was close to the assignment's target of approximately 300 epochs. At this point, I recorded a training loss of 0.433 and a test loss of 0.486.
 
-Three hidden layers: 8, 8, and 8 neurons. Test loss: 0.016.
+![Default network at 325 epochs](docs/images/a1-default.jpg)
 
-### Noise and limited training data
+I observed that the output did not follow the alternating spiral arms well. The relatively high training loss indicated that the network had not fitted even the training examples closely. I therefore treated this result as a weak baseline fit, rather than describing the test loss alone as evidence of overfitting.
 
-![Noise: 50. Training data: 10%. Test loss: 0.611.](docs/images/a3-noisy.jpg)
+The test loss exceeded the training loss by 0.053. I recorded this difference, but I did not use it to conclude that network capacity was the only limitation. A single run at one stopping point cannot establish whether more training would have improved the same architecture.
 
-Noise: 50. Training data: 10%. Test loss: 0.611.
+## Entry 2: Increasing network capacity
 
-### What happened in step A4?
+I increased the first hidden layer from four neurons to eight. I increased the second hidden layer from two neurons to eight. I then added a third hidden layer and increased it to eight neurons. The resulting architecture was 8, 8, 8.
 
-With noise at 50 and training data at 10%, training loss was 0.303 and test loss was 0.611. The model fit the training examples better than the unseen test examples. This gap is evidence of overfitting: the model learned details that did not apply well to new data.
+I retained the clean spiral dataset, 50% training data, and seed 0.25258. I also retained the input features, learning rate, activation, batch size, and regularization settings. I trained the larger network until the output followed the spiral well, then paused it at 1080 epochs.
 
-### Why does data poisoning concern a defender?
+I recorded a training loss of 0.005 and a test loss of 0.016. Both losses were substantially lower than the baseline values. The test loss decreased by 0.470, while the difference between test loss and training loss was 0.011.
 
-An attacker can add false examples or incorrect labels to the training data. The model can learn these errors and miss attacks or flag safe activity as a threat. This attack is called data poisoning.
+![Larger network at 1080 epochs](docs/images/a2-larger.jpg)
 
-## Part B: Tokens
+I observed curved regions in the output that followed the two spiral classes. This visual result agreed with the low test loss. I interpreted the combined evidence as successful learning under the recorded clean-data conditions.
 
-Tool: [OpenAI Tokenizer](https://platform.openai.com/tokenizer).
-Selected model group: `GPT-5.x & O1/3`.
-Inputs contained no leading spaces or final newline.
+I did not treat this comparison as a controlled measurement of architecture alone. I changed both the architecture and the training duration. To isolate the effect of network size, I would compare the architectures at matched epoch counts and repeat the runs with several seeds. I did not perform those additional experiments in this lab.
+
+## Entry 3: Adding noise and limiting training data
+
+I retained the 8, 8, 8 architecture for the final experiment. I changed noise from 0 to 50 and reduced the training-data proportion from 50% to 10%. After these changes, the recorded data seed was 0.38080. I retained the other model settings.
+
+I trained the network again and paused it at 780 epochs. I recorded a training loss of 0.303 and a test loss of 0.611. The test loss exceeded the training loss by 0.308, a much larger difference than in the clean-data run.
+
+![Noisy-data network at 780 epochs](docs/images/a3-noisy.jpg)
+
+I observed that the output no longer formed the clear spiral regions seen in the larger clean-data run. The loss curves also showed a separation between training and test performance. I interpreted this combination as evidence of overfitting: the fitted relationships transferred poorly to the withheld examples.
+
+I also noted that the training loss remained appreciable. The model did not fit the noisy training examples perfectly. Overfitting here refers to the poorer performance on unseen data, rather than complete memorization or a training loss near zero.
+
+I changed noise and the training-data proportion together, as instructed. The data seed and stopping point also differed from the preceding run. I therefore cannot assign the loss increase to one factor independently. My conclusion concerns the combined experimental conditions.
+
+## Security interpretation: Data poisoning
+
+I related the final experiment to the risk of unreliable training data. If an attacker inserts misleading examples or incorrect labels, a model can learn relationships that weaken a defender's classifications. For example, those relationships could contribute to missed attacks or false alarms on legitimate activity.
+
+I distinguished this security interpretation from the procedure I actually performed. I used the Playground noise control; I did not inject malicious examples or test a targeted poisoning attack. The experiment illustrated sensitivity to data conditions, while data poisoning describes intentional manipulation by an adversary.
+
+## Entry 4: Examining tokenization
+
+I opened the [OpenAI Tokenizer](https://platform.openai.com/tokenizer) and used the selected model group, `GPT-5.x & O1/3`. I entered each example separately. I used no leading spaces or final newline and recorded the displayed token and character counts.
 
 | Input type | Exact input | Tokens | Characters |
 | --- | --- | --- | --- |
-| English | `The model learns from training data.` | 7 | 36 |
-| Python | `print("Hello, world!")` | 6 | 22 |
-| Example string | `Gr@mbl1ng!2026` | 8 | 14 |
+| English sentence | `The model learns from training data.` | 7 | 36 |
+| Python statement | `print("Hello, world!")` | 6 | 22 |
+| Password-like example | `Gr@mbl1ng!2026` | 8 | 14 |
 
-Rare strings split into more tokens because the tokenizer represents unfamiliar character sequences with smaller pieces from its vocabulary.
+For the English sentence, I observed seven tokens for 36 characters. The display separated the sentence into familiar word units and a final punctuation token. I noted that spaces can form part of tokens, so token boundaries should not be equated with isolated dictionary words.
 
-The example string was split into `Gr`, `@m`, `bl`, `1`, `ng`, `!`, `202`, and `6`.
+![English sentence tokenization](docs/images/b1-english.jpg)
 
-### Tokenizer evidence
+For the Python statement, I recorded six tokens for 22 characters. The display grouped some punctuation with adjacent characters. I therefore did not assume that each punctuation mark, word, or programming symbol would receive a separate token.
 
-![English sentence](docs/images/b1-english.jpg)
+![Python statement tokenization](docs/images/b2-python.jpg)
 
-![Python code](docs/images/b2-python.jpg)
+The password-like example produced eight tokens despite containing only 14 characters. I recorded the displayed pieces as `Gr`, `@m`, `bl`, `1`, `ng`, `!`, `202`, and `6`. This short string required more tokens than either of the longer examples.
 
-![Example string](docs/images/b3-rare-string.jpg)
+![Password-like example tokenization](docs/images/b3-rare-string.jpg)
 
-## Run settings
+I interpreted this result in terms of the tokenizer's vocabulary. An uncommon mixture of letters, numbers, and symbols can require several smaller pieces. Character count alone therefore did not predict token count across these inputs. My recorded counts apply to the selected tokenizer group and the exact strings shown above.
 
-These links restore the settings. They do not restore the trained weights or recorded epoch count.
+## Final interpretation and limitations
 
-- [Default](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=spiral&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.25258&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false)
-- [Larger](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=spiral&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=8,8,8&seed=0.25258&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false)
-- [Noisy](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=spiral&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=50&networkShape=8,8,8&seed=0.38080&showTestData=false&discretize=false&percTrainData=10&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false)
+I found that the larger network, after additional training, represented the clean spiral substantially better than the baseline network. Under the combined conditions of high noise and limited training data, I observed a larger gap between training and test loss. These results supported the distinction between fitting available examples and generalizing to unseen examples.
 
-## References
+I treated the results as observations from three individual runs. I did not calculate averages, confidence intervals, or classification accuracy. The screenshots preserve the observed stopping points, while the settings links in the report restore configuration rather than trained weights.
 
-- [TensorFlow Playground](https://playground.tensorflow.org/)
-- [OpenAI Tokenizer](https://platform.openai.com/tokenizer)
+The tokenization exercise showed a separate constraint on language-model input: short text can still require many tokens relative to its length. Together, the exercises helped me distinguish the quality of training evidence from the representation of input text. Both affect how I interpret an AI system's behavior, although this lab did not measure a deployed cybersecurity system.
