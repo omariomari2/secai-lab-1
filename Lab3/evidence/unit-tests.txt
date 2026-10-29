@@ -1,0 +1,24 @@
+test_approval_expires (test_gramhelp.Controls.test_approval_expires) ... ok
+test_approved_ticket_created_once (test_gramhelp.Controls.test_approved_ticket_created_once) ... ok
+test_audit_redacts_payloads_and_tokens (test_gramhelp.Controls.test_audit_redacts_payloads_and_tokens) ... ok
+test_changed_ticket_denied (test_gramhelp.Controls.test_changed_ticket_denied) ... ok
+test_document_acl_filters_before_retrieval (test_gramhelp.Controls.test_document_acl_filters_before_retrieval) ... ok
+test_duplicate_document_cannot_silently_replace_policy (test_gramhelp.Controls.test_duplicate_document_cannot_silently_replace_policy) ... ok
+test_html_output_is_inert (test_gramhelp.Controls.test_html_output_is_inert) ... ok
+test_invalid_ticket_schema_denied (test_gramhelp.Controls.test_invalid_ticket_schema_denied) ... ok
+test_missing_and_unknown_identity_denied (test_gramhelp.Controls.test_missing_and_unknown_identity_denied) ... ok
+test_null_role_unknown_principal_cannot_retrieve_or_propose (test_gramhelp.Controls.test_null_role_unknown_principal_cannot_retrieve_or_propose) ... ok
+test_other_balance_denied (test_gramhelp.Controls.test_other_balance_denied) ... ok
+test_other_user_cannot_approve_or_execute (test_gramhelp.Controls.test_other_user_cannot_approve_or_execute) ... ok
+test_own_balance_allowed (test_gramhelp.Controls.test_own_balance_allowed) ... ok
+test_quota_enforced_before_balance_return (test_gramhelp.Controls.test_quota_enforced_before_balance_return) ... ok
+test_reviewed_injection_still_reaches_retrieval (test_gramhelp.Controls.test_reviewed_injection_still_reaches_retrieval) ... ok
+test_student_cannot_publish_document (test_gramhelp.Controls.test_student_cannot_publish_document) ... ok
+test_ticket_requires_approval (test_gramhelp.Controls.test_ticket_requires_approval) ... ok
+test_unknown_document_scope_denied (test_gramhelp.Controls.test_unknown_document_scope_denied) ... ok
+test_unreviewed_document_denied (test_gramhelp.Controls.test_unreviewed_document_denied) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.003s
+
+OK
