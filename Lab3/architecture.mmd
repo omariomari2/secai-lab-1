@@ -1,0 +1,35 @@
+flowchart TB
+  subgraph clients["TB1: Untrusted clients"]
+    U["Student user"]
+    S["Staff uploader"]
+  end
+  subgraph app["University application"]
+    C["Chatbot / orchestrator"]
+    G["Tool policy gateway"]
+    A["Separate approval UI"]
+    D["Document upload / review"]
+    V["Vector database: ACL metadata"]
+  end
+  subgraph model["TB2: Model provider"]
+    L["LLM"]
+  end
+  subgraph internal["TB3: Restricted internal services"]
+    B["Balance API: read own account"]
+    T["Ticketing system: create only"]
+  end
+  U -->|"Authenticated question"| C
+  C -->|"Scoped prompt / retrieved text"| L
+  L -->|"Answer / proposed tool call"| C
+  C -->|"Principal-filtered query"| V
+  V -->|"Untrusted retrieved chunks"| C
+  S -->|"Staff-authenticated PDF upload"| D
+  D -->|"TB4: reviewed, versioned content to index"| V
+  C -->|"Arguments + server-bound identity"| G
+  U -->|"Confirm exact ticket fields"| A
+  A -->|"Bound, expiring, single-use approval"| G
+  G -->|"Student-scoped read token"| B
+  B -->|"Own balance"| G
+  G -->|"Approved ticket only"| T
+  T -->|"Ticket identifier"| G
+  G -->|"Scoped result"| C
+  C -->|"Escaped response"| U
