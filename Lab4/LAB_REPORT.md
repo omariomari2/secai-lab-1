@@ -76,7 +76,8 @@ Verdicts evaluate the atomic excerpt, not whether an attack occurred. Correct me
 | V10  /  10.0.4.22 is a private address. | Correct | RFC 1918 §3; L6 | 10.0.4.22 falls within 10.0.0.0–10.255.255.255. Private addressing does not establish authorization. |
 | V11  /  No evidence links mlee login to earlier sequence or establishes authorization. | Correct | L1–L6 | Different account/source/time; no correlation or approval records supplied. Absence of evidence is not proof of independence. |
 | V12  /  Early sequence is consistent with password guessing. | Unsupported | L1–L3; T1110.001 | Reasonable attack hypothesis. Failures alone do not prove intent, password values, automation, or guessing. |
-| V13  /  Sequence is consistent with use of a valid account. | Unsupported | L4; T1078 | Authentication acceptance is observed; adversarial valid-account abuse is not proved. |
+| V13  /  Sequence is consistent with use of a valid account. | Correct | L4; T1078 | L4 supports accepted authentication for jdoe. This observation does not assert adversarial use. |
+| V13a  /  Separate hypothesis: Adversarial use of jdoe’s accepted credentials occurred. | Unsupported | L4; T1078 | Actual account abuse is unproved; authorization and actor identity are unknown. |
 | V14  /  Sequence is consistent with an attempted privileged file download. | Correct | L5 | A root-context wget command is recorded. This is a command-level attempt, not proof of process/network success. |
 | V15  /  Unauthorized access is plausible. | Unsupported | L1–L5 | Reasonable hypothesis from clustered failures, acceptance, and privileged command; no authorization evidence. |
 | V16  /  Authorization, credential theft, and compromise are unconfirmed. | Correct | Full L1–L6 | No approval records, credential acquisition, or independent compromise evidence supplied. |
@@ -95,18 +96,22 @@ Verdicts evaluate the atomic excerpt, not whether an attack occurred. Correct me
 | V24  /  T1110.001 — Password Guessing exists with this title. | Correct | Official MITRE T1110.001 | Canonical ID and sub-technique name verified; see ATT&CK table. |
 | V25  /  T1110.001 tentatively explains failures; intent and scale unconfirmed. | Unsupported | L1–L3; official MITRE | Conditional hypothesis consistent with guessing; authentication failures alone are insufficient for confirmation. |
 | V26  /  T1078 — Valid Accounts exists with this title. | Correct | Official MITRE T1078 | Canonical ID and technique name verified. |
-| V27  /  T1078 applies if accepted credentials were used adversarially; acceptance alone is not abuse. | Unsupported | L4; official MITRE | The condition is sensible, but the attack mapping remains unconfirmed. Account type is unspecified; no sub-technique inferred. |
+| V27  /  T1078 applies if accepted credentials were used adversarially; acceptance alone is not abuse. | Correct | L4; official MITRE | The official T1078 description requires adversarial account abuse; the excerpt correctly makes applicability conditional and does not equate acceptance with abuse. |
+| V27a  /  Separate hypothesis: T1078 Valid Accounts occurred as adversarial account abuse. | Unsupported | L4; official MITRE T1078 | Authentication is accepted, but adversarial credential use and account type are unverified. |
 
 ### Claims 28–33
 
 | ID / claim | Verdict | Evidence | Reason |
 | --- | --- | --- | --- |
 | V28  /  T1548.003 — Sudo and Sudo Caching exists with this title. | Correct | Official MITRE T1548.003 | Canonical ID and sub-technique name verified. |
-| V29  /  Root-context sudo is recorded; adversarial privilege escalation is a hypothesis. | Unsupported | L5; official MITRE | Observed sudo use supports investigation, not confirmed abuse. No caching, sudoers modification or bypass evidence. |
+| V29  /  Root-context sudo is recorded; adversarial privilege escalation is a hypothesis. | Correct | L5; official MITRE | L5 records sudo with USER=root. Calling adversarial escalation a hypothesis correctly states the evidence limit; no caching or sudoers abuse is shown. |
+| V29a  /  Separate hypothesis: Adversarial privilege escalation under T1548.003 occurred. | Unsupported | L5; official MITRE T1548.003 | Root-context sudo use alone does not establish malicious elevation, caching or sudoers abuse. |
 | V30  /  T1105 — Ingress Tool Transfer exists with this title. | Correct | Official MITRE T1105 | Canonical ID and technique name verified. |
-| V31  /  wget suggests attempted inbound transfer if adversarial; completion unproven. | Unsupported | L5; official MITRE | Reasonable conditional mapping, but malicious purpose, actual transfer and compromised environment are unverified. |
+| V31  /  wget suggests attempted inbound transfer if adversarial; completion unproven. | Correct | L5; official MITRE | The command supports an attempted inbound-transfer candidate. The excerpt correctly conditions adversarial applicability and states completion is unproved. |
+| V31a  /  Separate hypothesis: Adversarial Ingress Tool Transfer under T1105 occurred. | Unsupported | L5; official MITRE T1105 | Command recorded; malicious purpose, completed transfer and compromised environment remain unverified. |
 | V32  /  T1021.004 — SSH exists with this title. | Correct | Official MITRE T1021.004 | Canonical ID and sub-technique name verified. |
-| V33  /  SSH is observed; adversarial remote-service use is conditional; lateral movement is not established. | Unsupported | L1–L4, L6; official MITRE | SSH records are real within supplied evidence. MITRE places this under Lateral Movement; protocol alone is insufficient to assign this attack technique. Retain only a low-confidence investigation candidate. |
+| V33  /  SSH is observed; adversarial remote-service use is conditional; lateral movement is not established. | Correct | L1–L4, L6; official MITRE | SSH is recorded in L1–L4 and L6. The excerpt correctly leaves adversarial use conditional and lateral movement unestablished; MITRE lists the Lateral Movement tactic. |
+| V33a  /  Separate hypothesis: Adversarial SSH lateral movement under T1021.004 occurred. | Unsupported | L1–L4, L6; official MITRE T1021.004 | No adversarial movement between hosts or linked internal pivot is demonstrated. Protocol observation alone is insufficient. |
 
 ### Recommendation scope
 
