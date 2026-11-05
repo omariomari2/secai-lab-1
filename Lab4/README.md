@@ -6,6 +6,5 @@
 
 All attack mappings are conditional; no download success, execution, malware, compromise, attribution or lateral movement is proved. No response action was performed. See PROVENANCE.md for truthful AI assistance and limitations.
 
-Native Google Doc workspace (publication/export verification pending): https://docs.google.com/document/d/14VSIOewr0TlIxVORkZKPs5-A8u8V8vHnVsOwu7rDvAY/edit
 
 Native Google Doc workspace (publication/export verification pending): https://docs.google.com/document/d/14VSIOewr0TlIxVORkZKPs5-A8u8V8vHnVsOwu7rDvAY/edit
