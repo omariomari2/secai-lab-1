@@ -179,4 +179,4 @@ No response action has been performed. The supplied indicators were treated as t
 | https://attack.mitre.org/techniques/T1105/ | Canonical ATT&CK identity and conditional behavior comparison; checked November 4, 2026 (America/Chicago). |
 | https://attack.mitre.org/techniques/T1021/004/ | Canonical ATT&CK identity and conditional behavior comparison; checked November 4, 2026 (America/Chicago). |
 | https://www.rfc-editor.org/info/rfc1918/ | Section 3: private address space includes 10.0.0.0–10.255.255.255; checked November 4, 2026 (America/Chicago). |
-| Instructor-provided prompt and six synthetic logs | Primary exercise evidence; reproduced below. |
+| Instructor-provided prompt and six synthetic logs | Primary exercise evidence; reproduced in this submission. |
